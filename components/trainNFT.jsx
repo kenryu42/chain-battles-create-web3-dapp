@@ -9,6 +9,8 @@ import abi from "../utils/ChainBattles.json";
 import { alchemy } from "../utils/alchemySetup";
 
 export const TrainNFT = ({ minted, setMinted, isConnected }) => {
+	const [link, setLink] = useState("");
+	const [connected, setConnected] = useState(false);
 	const [trainedMessage, setTrainedMessage] = useState("");
 	const [metadataUpdate, setMetadataUpdate] = useState("");
 	const [tokenId, setTokenId] = useState(0);
@@ -25,14 +27,15 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 		enabled: tokenId,
 	});
 	const { data, write, isLoading } = useContractWrite(config);
-	const [connected, setConnected] = useState(false);
 	const { isFetching, isFetched } = useWaitForTransaction({
 		wait: data?.wait,
 		hash: data?.hash,
 		onSuccess(data) {
 			console.log("NFT trained!");
-			console.log(`https://mumbai.polygonscan.com/tx/${data.transactionHash}`);
-			setTrainedMessage("Successfully Trained! 💪");
+			const txnLink = `https://mumbai.polygonscan.com/tx/${data.transactionHash}`;
+			console.log(txnLink);
+			setTrainedMessage(`Successfully Trained Token Id: ${tokenId} 💪`);
+			setLink(txnLink);
 			setMinted(!minted);
 		},
 	});
@@ -85,6 +88,14 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 						{isLoading || isFetching ? "Training..." : "Train Token"}
 					</button>
 					<h3>{trainedMessage}</h3>
+					<a
+						href={link}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={styles.link}
+					>
+						{link}
+					</a>
 					<h3>{metadataUpdate}</h3>
 				</>
 			)}
