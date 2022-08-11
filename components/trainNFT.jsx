@@ -20,7 +20,9 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 		args: [tokenId],
 		overrrides: {
 			value: tokenId,
+			gasLimit: 1e7,
 		},
+		enabled: tokenId,
 	});
 	const { data, write, isLoading } = useContractWrite(config);
 	const [connected, setConnected] = useState(false);
@@ -28,6 +30,7 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 		wait: data?.wait,
 		hash: data?.hash,
 		onSuccess(data) {
+			console.log("NFT trained!");
 			console.log(`https://mumbai.polygonscan.com/tx/${data.transactionHash}`);
 			setTrainedMessage("Successfully Trained! 💪");
 			setMinted(!minted);
@@ -36,6 +39,7 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 
 	const train = async () => {
 		try {
+			console.log("training...");
 			write?.();
 		} catch (error) {
 			console.log("Train Failed: ", error);
@@ -75,7 +79,7 @@ export const TrainNFT = ({ minted, setMinted, isConnected }) => {
 					<br />
 					<button
 						className={styles.button}
-						disabled={isLoading || isFetching}
+						disabled={!write || isLoading || isFetching}
 						onClick={() => train()}
 					>
 						{isLoading || isFetching ? "Training..." : "Train Token"}
