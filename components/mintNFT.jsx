@@ -14,6 +14,9 @@ export const MintNFT = ({ minted, setMinted, isConnected }) => {
 		addressOrName: contractAddress,
 		contractInterface: abi.abi,
 		functionName: "mint",
+		overrides: {
+			gasLimit: 1e7,
+		},
 	});
 	const { data, write, isLoading } = useContractWrite(config);
 	const [connected, setConnected] = useState(false);
@@ -21,6 +24,7 @@ export const MintNFT = ({ minted, setMinted, isConnected }) => {
 		wait: data?.wait,
 		hash: data?.hash,
 		onSuccess(data) {
+			console.log("NFT minted!");
 			console.log(`https://mumbai.polygonscan.com/tx/${data.transactionHash}`);
 			setMintedMessage("Minted successfully! 💙");
 			setMinted(!minted);
@@ -28,6 +32,7 @@ export const MintNFT = ({ minted, setMinted, isConnected }) => {
 	});
 	const mint = async () => {
 		try {
+			console.log("minting...");
 			write?.();
 		} catch (error) {
 			console.log("Mint Failed: ", error);
@@ -44,7 +49,7 @@ export const MintNFT = ({ minted, setMinted, isConnected }) => {
 				<>
 					<button
 						className={styles.button}
-						disabled={isLoading || isFetching}
+						disabled={!write || isLoading || isFetching}
 						onClick={() => mint()}
 					>
 						{isLoading || isFetching ? "Minting..." : "Mint Token"}
