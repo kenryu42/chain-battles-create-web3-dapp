@@ -50,7 +50,7 @@ export default function Home() {
 						Click here to get Mumbai Faucet if you don&apos;t have one.
 					</a>
 				</Section>
-				<Section title={"Get NFTs by Owner"}>
+				<Section title={"Most recently received NFTs by Owner"}>
 					<NFTGallery
 						alchemy={alchemy}
 						address={address}
