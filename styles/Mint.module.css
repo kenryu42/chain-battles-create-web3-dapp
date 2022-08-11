@@ -6,3 +6,10 @@
 	border-radius: 0.5rem;
 	border: none;
 }
+
+.link {
+	color: #4938fd;
+}
+.link:hover {
+	text-decoration: underline;
+}
